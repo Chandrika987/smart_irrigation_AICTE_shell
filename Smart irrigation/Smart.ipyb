@@ -1,0 +1,38 @@
+import pandas as pd
+
+# Set the file path
+csv_file = 'irrigation_machine.csv'
+
+# Read the CSV file
+try:
+    df = pd.read_csv(csv_file)
+
+    # Check required columns
+    required_columns = {'timestamp', 'temperature', 'humidity', 'soil_moisture'}
+    if not required_columns.issubset(df.columns):
+        raise ValueError(f"CSV file must contain columns: {required_columns}")
+
+    # Define moisture threshold
+    moisture_threshold = 40
+
+    print("🌿 Smart Irrigation Sensor Data\n")
+    for index, row in df.iterrows():
+        timestamp = row['timestamp']
+        temp = row['temperature']
+        humidity = row['humidity']
+        moisture = row['soil_moisture']
+
+        pump_status = "ON" if moisture < moisture_threshold else "OFF"
+
+        print(f"🕒 {timestamp}")
+        print(f"🌡️ Temperature: {temp}°C")
+        print(f"💧 Humidity: {humidity}%")
+        print(f"🌱 Soil Moisture: {moisture}%")
+        print(f"🚰 Water Pump: {pump_status}")
+        print("-" * 40)
+
+except FileNotFoundError:
+    print("❌ CSV file not found. Please check the file path.")
+except Exception as e:
+    print(f"❌ Error: {e}")
+
